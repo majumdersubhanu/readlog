@@ -24,34 +24,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final List<Book> _bookList = [
-    Book(
-      title: 'The Alchemist',
-      author: 'Paulo Coelho',
-      status: BookStatus.completed,
-    ),
-    Book(
-      title: 'Atomic Habits',
-      author: 'James Clear',
-      status: BookStatus.reading,
-    ),
-    Book(
-      title: 'Sapiens',
-      author: 'Yuval Noah Harari',
-      status: BookStatus.wishList,
-    ),
-    Book(title: '1984', author: 'George Orwell', status: BookStatus.completed),
-    Book(
-      title: 'To Kill a Mockingbird',
-      author: 'Harper Lee',
-      status: BookStatus.reading,
-    ),
-    Book(
-      title: 'The Great Gatsby',
-      author: 'F. Scott Fitzgerald',
-      status: BookStatus.wishList,
-    ),
-  ];
+  final List<Book> _bookList = [];
 
   final _titleController = TextEditingController();
   final _authorController = TextEditingController();
