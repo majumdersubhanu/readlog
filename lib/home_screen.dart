@@ -67,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Books'),
+        forceMaterialTransparency: true,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(68),
           child: _buildSearchBar(),
@@ -118,15 +119,15 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 4),
               Chip(
                 label: Text(book.status.label),
-                backgroundColor: book.status.color.withOpacity(0.1),
+                backgroundColor: book.status.color.withValues(alpha: 0.1),
                 shape: StadiumBorder(
                   side: BorderSide(color: book.status.color),
                 ),
               ),
             ],
           ),
-          trailing: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          trailing: Wrap(
+            spacing: 8,
             children: [
               IconButton(
                 icon: Icon(
@@ -247,8 +248,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 onPressed: () {
                   if (_titleController.text.isEmpty ||
                       _authorController.text.isEmpty ||
-                      _dialogStatus == null)
+                      _dialogStatus == null) {
                     return;
+                  }
 
                   setState(() {
                     _bookList.add(
