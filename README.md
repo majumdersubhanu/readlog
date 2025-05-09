@@ -78,6 +78,7 @@ animations), feel free to fork the repo and experiment!
 
 **Subhanu Majumder**
 Core Team Member @ GDG on Campus | Flutter Developer
+
 [LinkedIn](https://linkedin.com/in/subhanumajumder) • [GitHub](https://github.com/majumdersubhanu)
 
 ---
