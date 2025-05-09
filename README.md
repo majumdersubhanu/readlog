@@ -47,8 +47,6 @@ flutter pub get
 flutter run
 ```
 
-```
-
 ---
 
 ## 📘 Workshop Learning Outcomes
@@ -87,4 +85,3 @@ Core Team Member @ GDG on Campus | Flutter Developer
 ## 📄 License
 
 This project is licensed under the MIT License.
-```
