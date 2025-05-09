@@ -1,20 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:readlog/mock_books.dart';
 
-class Book {
-  final String title;
-  final String author;
-  final BookStatus status;
-  bool isFavourite;
-
-  Book({
-    required this.title,
-    required this.author,
-    required this.status,
-    this.isFavourite = false,
-  });
-}
-
-enum BookStatus { reading, completed, wishList }
+import 'enums.dart';
+import 'models.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -24,7 +12,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final List<Book> _bookList = [];
+  final List<Book> _bookList = mockBooks;
 
   final _titleController = TextEditingController();
   final _authorController = TextEditingController();
@@ -75,8 +63,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildBookCard(Book book, int index) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: ListTile(
@@ -243,29 +229,5 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
     );
-  }
-}
-
-extension BookStatusExtension on BookStatus {
-  Color get color {
-    switch (this) {
-      case BookStatus.reading:
-        return Colors.blue;
-      case BookStatus.completed:
-        return Colors.green;
-      case BookStatus.wishList:
-        return Colors.orange;
-    }
-  }
-
-  String get label {
-    switch (this) {
-      case BookStatus.reading:
-        return 'Reading';
-      case BookStatus.completed:
-        return 'Completed';
-      case BookStatus.wishList:
-        return 'Wish List';
-    }
   }
 }
