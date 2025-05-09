@@ -19,6 +19,18 @@ using a scalable, feature-first architecture.
 
 ---
 
+## 📱 App Screenshots
+
+| Home Screen | Add Book Dialog | Edit Book Dialog |
+|-------------|-----------------|------------------|
+| ![Home](screenshots/home_screen.jpg) | ![Add](screenshots/add_book_dialog.jpg) | ![Edit](screenshots/edit_book_dialog.jpg) |
+
+| Search Result | Status Filter Result |
+|---------------|----------------------|
+| ![Search](screenshots/search_result.jpg) | ![Filter](screenshots/status_filter_result.jpg) |
+
+---
+
 ## 🛠️ Getting Started
 
 ### Requirements
@@ -33,6 +45,8 @@ git clone https://github.com/majumdersubhanu/readlog.git
 cd readlog
 flutter pub get
 flutter run
+```
+
 ```
 
 ---
@@ -64,8 +78,8 @@ animations), feel free to fork the repo and experiment!
 
 ## 👨‍💻 Developed By
 
-**Subhanu Majumder**  
-Core Team Member @ GDG on Campus | Flutter Developer  
+**Subhanu Majumder**
+Core Team Member @ GDG on Campus | Flutter Developer
 [LinkedIn](https://linkedin.com/in/subhanumajumder) • [GitHub](https://github.com/majumdersubhanu)
 
 ---
@@ -73,3 +87,4 @@ Core Team Member @ GDG on Campus | Flutter Developer
 ## 📄 License
 
 This project is licensed under the MIT License.
+```
