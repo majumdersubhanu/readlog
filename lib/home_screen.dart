@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:readlog/mock_books.dart';
 
 import 'enums.dart';
+import 'mock_books.dart';
 import 'models.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -61,49 +61,56 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildBookCard(Book book, int index) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: ListTile(
-          contentPadding: EdgeInsets.zero,
-          title: Text(
-            book.title,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(book.author, style: const TextStyle(color: Colors.black87)),
-              const SizedBox(height: 4),
-              Chip(
-                label: Text(book.status.label),
-                backgroundColor: book.status.color.withValues(alpha: 0.1),
-                shape: StadiumBorder(
-                  side: BorderSide(color: book.status.color),
+    return GestureDetector(
+      onLongPress: () => _showEditBookDialog(editableBook: book, index: index),
+      child: Card(
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: ListTile(
+            contentPadding: EdgeInsets.zero,
+            title: Text(
+              book.title,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  book.author,
+                  style: const TextStyle(color: Colors.black87),
                 ),
-              ),
-            ],
-          ),
-          trailing: Wrap(
-            spacing: 8,
-            children: [
-              IconButton(
-                icon: Icon(
-                  book.isFavourite ? Icons.favorite : Icons.favorite_border,
-                  color: book.isFavourite ? Colors.red : null,
+                const SizedBox(height: 4),
+                Chip(
+                  label: Text(book.status.label),
+                  backgroundColor: book.status.color.withValues(alpha: 0.1),
+                  shape: StadiumBorder(
+                    side: BorderSide(color: book.status.color),
+                  ),
                 ),
-                onPressed: () {
-                  setState(() => book.isFavourite = !book.isFavourite);
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.delete),
-                onPressed: () {
-                  setState(() => _bookList.removeAt(index));
-                },
-              ),
-            ],
+              ],
+            ),
+            trailing: Wrap(
+              spacing: 8,
+              children: [
+                IconButton(
+                  icon: Icon(
+                    book.isFavourite ? Icons.favorite : Icons.favorite_border,
+                    color: book.isFavourite ? Colors.red : null,
+                  ),
+                  onPressed: () {
+                    // isFavourite = true -> false and vice versa
+                    setState(() => book.isFavourite = !book.isFavourite);
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.delete),
+                  onPressed: () {
+                    setState(() => _bookList.removeAt(index));
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -115,6 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Wrap(
         spacing: 8,
+        // Takes in a function with the particular object as an argument, and returns a widget for each object.
         children:
             BookStatus.values.map((status) {
               final isSelected = _statusFilter == status;
@@ -137,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       child: TextField(
         decoration: const InputDecoration(
-          hintText: 'Search books...',
+          hintText: 'Search books by name or author...',
           border: OutlineInputBorder(),
           prefixIcon: Icon(Icons.search),
         ),
@@ -152,6 +160,8 @@ class _HomeScreenState extends State<HomeScreen> {
     _dialogStatus = null;
   }
 
+  /// [List<Book>] explicitly
+  /// returns a list of books.
   List<Book> _getFilteredBooks() {
     return _bookList.where((book) {
       final matchesStatus =
@@ -205,13 +215,12 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  if (_titleController.text.isEmpty ||
-                      _authorController.text.isEmpty ||
-                      _dialogStatus == null) {
-                    return;
-                  }
-
                   setState(() {
+                    if (_titleController.text.isEmpty ||
+                        _authorController.text.isEmpty ||
+                        _dialogStatus == null) {
+                      return;
+                    }
                     _bookList.add(
                       Book(
                         title: _titleController.text,
@@ -228,6 +237,78 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
+    );
+  }
+
+  void _showEditBookDialog({required Book editableBook, required int index}) {
+    _titleController.text = editableBook.title;
+    _authorController.text = editableBook.author;
+    _dialogStatus = editableBook.status;
+
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: const Text('Edit Book'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: _titleController,
+                decoration: const InputDecoration(labelText: 'Book Title'),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: _authorController,
+                decoration: const InputDecoration(labelText: 'Author'),
+              ),
+              const SizedBox(height: 8),
+              DropdownButtonFormField<BookStatus>(
+                value: _dialogStatus,
+                decoration: const InputDecoration(labelText: 'Status'),
+                items:
+                    BookStatus.values.map((status) {
+                      return DropdownMenuItem(
+                        value: status,
+                        child: Text(status.label),
+                      );
+                    }).toList(),
+                onChanged: (value) => setState(() => _dialogStatus = value),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                _clearForm();
+                Navigator.pop(context);
+              },
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (_titleController.text.isEmpty ||
+                    _authorController.text.isEmpty ||
+                    _dialogStatus == null) {
+                  return;
+                }
+                setState(() {
+                  _bookList[index] = Book(
+                    title: _titleController.text,
+                    author: _authorController.text,
+                    status: _dialogStatus!,
+                    isFavourite: _bookList[index].isFavourite,
+                  );
+                });
+
+                _clearForm();
+                Navigator.pop(context);
+              },
+              child: const Text('Save'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
